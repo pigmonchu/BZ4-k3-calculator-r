@@ -1,25 +1,36 @@
 from tkinter import *
 from tkinter import ttk
 
+HEIGHTBTN = 50
+WIDTHBTN = 68
+
 class CalcButton(ttk.Frame):
     def __init__(self, parent, text, command, wbtn=1, hbtn=1):
-        ttk.Frame.__init__(self, parent)
+        ttk.Frame.__init__(self, parent, width=wbtn*WIDTHBTN, ...)
 
 class Display(ttk.Frame):
     def __init__(self, parent):
-        ttk.Frame.__init__(self, parent)
+        ttk.Frame.__init__(self, parent, width=4*WIDTHBTN, height=HEIGHTBTN)
 
+        self.pack_propagate(0)
+        
+        s = ttk.Style()
+        s.theme_use('alt')
+        s.configure('my.TLabel', font='Helvetica 42')
 
+        self.__lbl = ttk.Label(self, text="_", style='my.TLabel', anchor=E, background='black', foreground='white')
+        self.__lbl.pack(side=TOP, fill=BOTH, expand=True)
 
 class Selector(ttk.Frame):
-    pass
+    def __init__(self, parent):
+        ttk.Frame.__init__(self, parent)
 
 class Calculator(ttk.Frame):
     def __init__(self, parent):
         ttk.Frame.__init__(self, parent)
 
         self.display = Display(self)
-        self.display.grid(colum=0, row=0, columnspan=4)
+        self.display.grid(column=0, row=0, columnspan=4)
 
         self.buttonAC = CalcButton(self, text="AC", command=None, wbtn=3)
         self.buttonAC.grid(column=0, row=1, columnspan=3)
@@ -30,7 +41,7 @@ class Calculator(ttk.Frame):
         self.buttonC.grid(column=0, row=2)
         self.buttonD = CalcButton(self, text="D", command=None)
         self.buttonD.grid(column=1, row=2)
-        self.buttonM = CalcButton(self, text="M", command=None)
+        self.buttonM = CalcButton(self, text="M", command=None, hbtn=3)
         self.buttonM.grid(column=2, row=2, rowspan=3)
         self.buttonMul = CalcButton(self, text="x", command=None)
         self.buttonMul.grid(column=3, row=2)
@@ -49,6 +60,9 @@ class Calculator(ttk.Frame):
         self.buttonAdd = CalcButton(self, text="-", command=None)
         self.buttonAdd.grid(column=3, row=3)
 
-        self.buttonEqu = CalcButton(self, text="=", command=None)
-        self.buttonEqu.grid(column=3, row=4, colspan=2)
+        self.buttonEqu = CalcButton(self, text="=", command=None, wbtn=2)
+        self.buttonEqu.grid(column=3, row=4, columnspan=2)
+
+        self.selector = Selector(self)
+        self.selector.grid(column=0, row=4)
 
