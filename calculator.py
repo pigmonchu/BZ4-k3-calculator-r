@@ -5,12 +5,17 @@ HEIGHTBTN = 50
 WIDTHBTN = 68
 
 class CalcButton(ttk.Frame):
-    def __init__(self, parent, text, command, wbtn=1, hbtn=1):
-        ttk.Frame.__init__(self, parent, width=wbtn*WIDTHBTN, ...)
+    def __init__(self, parent, text, command, wbtn=1, hbtn=1, name=None):
+        ttk.Frame.__init__(self, parent, width=wbtn*WIDTHBTN, height=hbtn*HEIGHTBTN)
+
+        self.pack_propagate(0)
+
+        self.__btn = ttk.Button(self, text=text, command=command)
+        self.__btn.pack(fill=BOTH, expand=True)
 
 class Display(ttk.Frame):
-    def __init__(self, parent):
-        ttk.Frame.__init__(self, parent, width=4*WIDTHBTN, height=HEIGHTBTN)
+    def __init__(self, parent, name=None):
+        ttk.Frame.__init__(self, parent, width=4*WIDTHBTN, height=HEIGHTBTN, name=name)
 
         self.pack_propagate(0)
         
@@ -22,14 +27,16 @@ class Display(ttk.Frame):
         self.__lbl.pack(side=TOP, fill=BOTH, expand=True)
 
 class Selector(ttk.Frame):
-    def __init__(self, parent):
-        ttk.Frame.__init__(self, parent)
+    def __init__(self, parent, name=None):
+        ttk.Frame.__init__(self, parent, name=name)
+
+        self.rbR = ttk.Radiobutton(self, name='optR', text='R')
 
 class Calculator(ttk.Frame):
-    def __init__(self, parent):
-        ttk.Frame.__init__(self, parent)
+    def __init__(self, parent, name=None):
+        ttk.Frame.__init__(self, parent, name=name)
 
-        self.display = Display(self)
+        self.display = Display(self, name='disp')
         self.display.grid(column=0, row=0, columnspan=4)
 
         self.buttonAC = CalcButton(self, text="AC", command=None, wbtn=3)
@@ -54,15 +61,15 @@ class Calculator(ttk.Frame):
         self.buttonSub.grid(column=3, row=3)
 
         self.buttonI = CalcButton(self, text="I", command=None)
-        self.buttonI.grid(column=0, row=3)
+        self.buttonI.grid(column=0, row=4)
         self.buttonV = CalcButton(self, text="V", command=None)
-        self.buttonV.grid(column=1, row=3)
+        self.buttonV.grid(column=1, row=4)
         self.buttonAdd = CalcButton(self, text="-", command=None)
-        self.buttonAdd.grid(column=3, row=3)
+        self.buttonAdd.grid(column=3, row=4)
 
         self.buttonEqu = CalcButton(self, text="=", command=None, wbtn=2)
-        self.buttonEqu.grid(column=3, row=4, columnspan=2)
+        self.buttonEqu.grid(column=2, row=5, columnspan=2)
 
-        self.selector = Selector(self)
+        self.selector = Selector(self, name='sel')
         self.selector.grid(column=0, row=4)
 
