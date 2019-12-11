@@ -170,20 +170,53 @@ class RomanNumber():
 
         return numArabigoTotal
 
-
-
-
-
-
-
-
-
     def __str__(self):
         return "{}".format(self.__romanValue)
+
+    def __int__(self):
+        return self.value
 
     def __repr__(self):
         return self.__romanValue
 
     def __add__(self, value):
-        #esto no funcionara
-        return RomanNumber(value) + self.value
+        resultado = int(value) + self.value
+        resultado = RomanNumber(resultado)
+        return resultado
+
+    def __radd__(self, value):
+        return self.__add__(value)
+
+    def __sub__(self, value):
+        resultado = max(0, int(value) - self.value)
+        resultado = RomanNumber(resultado)
+        return resultado
+
+
+    def __rsub__(self, value):
+        return self.__sub__(value)
+
+    def __mul__(self, value):
+        resultado = int(value) * self.value
+        resultado = RomanNumber(resultado)
+        return resultado
+
+    def __rmul__(self, value):
+        return self.__mul__(value)
+
+    def __truediv__(self, value):
+        resultado = int(value) // self.value
+        resultado = RomanNumber(resultado)
+        return resultado
+
+    def __rtruediv__(self, value):
+        return self.__rtruediv__(value)
+
+    def __div__(self, value):
+        return self.__truediv__(value)
+    
+    def __rdiv__(self, value):
+        return self.__div__(value)
+
+    def __lt__(self, value):
+        return int(self) < int(value)

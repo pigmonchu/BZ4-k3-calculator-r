@@ -102,7 +102,7 @@ class Calculator(ttk.Frame):
         self.buttonX.grid(column=0, row=3)
         self.buttonL = CalcButton(self, text="L", command=lambda: self.pantalla.addChar('L'))
         self.buttonL.grid(column=1, row=3)
-        self.buttonPL = CalcButton(self, text="(", command=None)
+        self.buttonPL = CalcButton(self, text="(", command=lambda: self.pantalla.addChar('('))
         self.buttonPL.grid(column=2, row=3,)
         self.buttonSub = CalcButton(self, text="-", command=lambda: self.operar('-'))
         self.buttonSub.grid(column=3, row=3)
@@ -111,7 +111,7 @@ class Calculator(ttk.Frame):
         self.buttonI.grid(column=0, row=4)
         self.buttonV = CalcButton(self, text="V", command=lambda: self.pantalla.addChar('V'))
         self.buttonV.grid(column=1, row=4)
-        self.buttonPR = CalcButton(self, text=")", command=None)
+        self.buttonPR = CalcButton(self, text=")", command=lambda: self.pantalla.addChar(')'))
         self.buttonPR.grid(column=2, row=4,)
         self.buttonAdd = CalcButton(self, text="+", command=lambda: self.operar('+'))
         self.buttonAdd.grid(column=3, row=4)
@@ -137,11 +137,11 @@ class Calculator(ttk.Frame):
 
     def operar(self, operacion):
         if operacion in ['+', '-', '/', 'x']:     
-            self.op1 = RomanNumber(self.pantalla.cadena).value
+            self.op1 = RomanNumber(self.pantalla.cadena)
             self.operacion = operacion
             self.pantalla.clear()
         elif operacion == '=':
-            self.op2 = RomanNumber(self.pantalla.cadena).value
+            self.op2 = RomanNumber(self.pantalla.cadena)
 
             if self.operacion == '+':
                 resultado = self.op1 + self.op2
@@ -151,12 +151,11 @@ class Calculator(ttk.Frame):
                 resultado = max(0, resultado)
             
             if self.operacion == '/':
-                resultado = self.op1 // self.op2
+                resultado = self.op1 / self.op2
 
             if self.operacion == 'x':
                 resultado = self.op1 * self.op2
 
-            resultado = RomanNumber(resultado)
             self.pantalla.muestra(resultado)
 
             
