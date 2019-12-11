@@ -1,4 +1,7 @@
 class RomanNumber():
+    value = 0
+    __romanValue = ''
+
     __valores = {'I':1, 'V': 5, 'X':10, 'L': 50, 'C':100, 'D': 500, 'M': 1000}
     __valores5 = { 'V': 5,  'L': 50,  'D': 500 } 
     __simbolosOrdenados = ['I', 'V', 'X', 'L', 'C', 'D', 'M']
@@ -10,15 +13,19 @@ class RomanNumber():
         3: {1: 'M', 'next': ''}
     }
 
-    def __init__(self, value):
+    def __init__(self, value=None):
         if isinstance(value, int):
             self.value = value
             self.__romanValue = self.__arabigo_a_romano()
-
-        if isinstance(value, str):
+        elif isinstance(value, str):
             self.__romanValue = value
             self.value = self.__romano_a_arabigo()
+        else:
+            raise TypeError('Argumento de RomanNumber ha de ser un entero o una cadena')
 
+    def cadenaAromano(self, cadena):
+        self.__romanValue = cadena
+        self.value = self.__romano_a_arabigo()
     
     def __invertir(self, cad):
         return cad[::-1]

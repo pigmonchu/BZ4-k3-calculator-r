@@ -35,7 +35,7 @@ class Display(ttk.Frame):
         self.__lbl = ttk.Label(self, text=self.cadena, style='my.TLabel', anchor=E, background='black', foreground='white')
         self.__lbl.pack(side=TOP, fill=BOTH, expand=True)
 
-    def pinta(self, caracter):
+    def addChar(self, caracter):
         if len(self.cadena) >= self.__maxnumbers:
             return
 
@@ -54,6 +54,10 @@ class Display(ttk.Frame):
     def clear(self):
         self.cadena = '_'
         self.__lbl.config(text=self.cadena)
+
+    def muestra(self, cadena):
+        self.cadena = str(cadena)
+        self.__lbl.config(text=cadena)
 
 class Selector(ttk.Frame):
     tipus = 'R'
@@ -82,49 +86,78 @@ class Calculator(ttk.Frame):
 
         self.buttonAC = CalcButton(self, text="AC", command=self.pantalla.clear, wbtn=3)
         self.buttonAC.grid(column=0, row=1, columnspan=3)
-        self.buttonDiv = CalcButton(self, text="÷", command=None)
+        self.buttonDiv = CalcButton(self, text="÷", command=lambda: self.operar('/'))
         self.buttonDiv.grid(column=3, row=1)
 
-        self.buttonC = CalcButton(self, text="C", command=lambda: self.pantalla.pinta('C'))
+        self.buttonC = CalcButton(self, text="C", command=lambda: self.pantalla.addChar('C'))
         self.buttonC.grid(column=0, row=2)
-        self.buttonD = CalcButton(self, text="D", command=lambda: self.pantalla.pinta('D'))
+        self.buttonD = CalcButton(self, text="D", command=lambda: self.pantalla.addChar('D'))
         self.buttonD.grid(column=1, row=2)
-        self.buttonM = CalcButton(self, text="M", command=lambda: self.pantalla.pinta('M')) 
+        self.buttonM = CalcButton(self, text="M", command=lambda: self.pantalla.addChar('M')) 
         self.buttonM.grid(column=2, row=2)
-        self.buttonMul = CalcButton(self, text="x", command=None)
+        self.buttonMul = CalcButton(self, text="x", command=lambda: self.operar('x'))
         self.buttonMul.grid(column=3, row=2)
 
-        self.buttonX = CalcButton(self, text="X", command=lambda: self.pantalla.pinta('X'))
+        self.buttonX = CalcButton(self, text="X", command=lambda: self.pantalla.addChar('X'))
         self.buttonX.grid(column=0, row=3)
-        self.buttonL = CalcButton(self, text="L", command=lambda: self.pantalla.pinta('L'))
+        self.buttonL = CalcButton(self, text="L", command=lambda: self.pantalla.addChar('L'))
         self.buttonL.grid(column=1, row=3)
         self.buttonPL = CalcButton(self, text="(", command=None)
         self.buttonPL.grid(column=2, row=3,)
-        self.buttonSub = CalcButton(self, text="-", command=None)
+        self.buttonSub = CalcButton(self, text="-", command=lambda: self.operar('-'))
         self.buttonSub.grid(column=3, row=3)
 
-        self.buttonI = CalcButton(self, text="I", command=lambda: self.pantalla.pinta('I'))
+        self.buttonI = CalcButton(self, text="I", command=lambda: self.pantalla.addChar('I'))
         self.buttonI.grid(column=0, row=4)
-        self.buttonV = CalcButton(self, text="V", command=lambda: self.pantalla.pinta('V'))
+        self.buttonV = CalcButton(self, text="V", command=lambda: self.pantalla.addChar('V'))
         self.buttonV.grid(column=1, row=4)
         self.buttonPR = CalcButton(self, text=")", command=None)
         self.buttonPR.grid(column=2, row=4,)
         self.buttonAdd = CalcButton(self, text="+", command=lambda: self.operar('+'))
         self.buttonAdd.grid(column=3, row=4)
 
-        self.buttonEqu = CalcButton(self, text="=", command=None, wbtn=2)
+        self.buttonEqu = CalcButton(self, text="=", command=lambda: self.operar('='), wbtn=2)
         self.buttonEqu.grid(column=2, row=5, columnspan=2)
 
         self.selector = Selector(self)
         self.selector.grid(column=0, row=5, columnspan=2)
 
+        '''
+        Eventos de teclado
+        
+        parent.bind("<Key>", self.keyboard)
+        '''
+    '''
+    def keyboard(self, event):
+        print(event.char)
+        tecla = event.char.upper()
+        if tecla in 'IVXLCDM()':
+            self.pantalla.addChar(tecla)
+    '''
+
     def operar(self, operacion):
-        if operacion in ['+', '-', '÷', 'x']:
-            self.op1 = RomanNumber(self.pantalla.cadena)
+        if operacion in ['+', '-', '/', 'x']:     
+            self.op1 = RomanNumber(self.pantalla.cadena).value
             self.operacion = operacion
             self.pantalla.clear()
         elif operacion == '=':
-            self.op2 = RomanNumber(self.pantalla.cadena)
-            ... procesar la operacion
-            resultado = self.op1 + self.op2
-        
+            self.op2 = RomanNumber(self.pantalla.cadena).value
+
+            if self.operacion == '+':
+                resultado = self.op1 + self.op2
+
+            if self.operacion == '-':
+                resultado = self.op1 - self.op2
+                resultado = max(0, resultado)
+            
+            if self.operacion == '/':
+                resultado = self.op1 // self.op2
+
+            if self.operacion == 'x':
+                resultado = self.op1 * self.op2
+
+            resultado = RomanNumber(resultado)
+            self.pantalla.muestra(resultado)
+
+            
+
