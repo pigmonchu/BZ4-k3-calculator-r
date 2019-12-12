@@ -5,6 +5,15 @@ from romannumber import *
 HEIGHTBTN = 50
 WIDTHBTN = 68
 
+def openParenthesis(cadena):
+    nP = 0
+    for caracter in cadena:
+        if caracter == '(':
+            nP +=1
+        if caracter == ')':
+            nP -=1
+    return nP
+
 class CalcButton(ttk.Frame):
     def __init__(self, parent, text, command, wbtn=1, hbtn=1):
         ttk.Frame.__init__(self, parent, width=wbtn*WIDTHBTN, height=hbtn*HEIGHTBTN)
@@ -43,8 +52,13 @@ class Display(ttk.Frame):
             self.cadena = ''
         self.cadena += caracter
 
+        candidato = self.cadena
+        nP = openParenthesis(self.cadena)
+        if nP > 0:
+            candidato = self.cadena + nP * ')' 
+
         try:
-            nr = RomanNumber(self.cadena)
+            nr = RomanNumber(candidato)
         except ValueError:
             self.cadena = self.cadena[:-1]
 
@@ -148,7 +162,6 @@ class Calculator(ttk.Frame):
 
             if self.operacion == '-':
                 resultado = self.op1 - self.op2
-                resultado = max(0, resultado)
             
             if self.operacion == '/':
                 resultado = self.op1 / self.op2

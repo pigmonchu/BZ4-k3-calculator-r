@@ -105,11 +105,15 @@ class RomanNumber():
             grupo = grupoParentesis[ix]
             numP = self.__numParentesis(grupo)
             if numP > 0:
+                if ix+numP >= len(grupoParentesis):
+                    raise ValueError('Número de paréntesis incorrecto - Faltan cierres')
                 for j in range(ix+1, ix+numP):
                     if grupoParentesis[j] != '':
                         raise ValueError('Simbolos entre parentesis de cierre') #Explota o Falla
                 ix += numP - 1
-
+            else:
+                if len(grupoParentesis)-ix > 1:
+                    raise ValueError('Número de paréntesis incorrecto - Sobran cierres')
             if len(grupo[numP:]) > 0:
                 res.append((numP, grupo[numP:]))
 
