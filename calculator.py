@@ -15,7 +15,7 @@ def openParenthesis(cadena):
     return nP
 
 class CalcButton(ttk.Frame):
-    def __init__(self, parent, text, command, wbtn=1, hbtn=1):
+    def __init__(self, parent, text, command, wbtn=1, hbtn=1, name=None):
         ttk.Frame.__init__(self, parent, width=wbtn*WIDTHBTN, height=hbtn*HEIGHTBTN)
 
         self.pack_propagate(0)
