@@ -77,11 +77,11 @@ class RomanNumberTest(unittest.TestCase):
         
         with self.assertRaises(ValueError) as context:
             RomanNumber('(VI)((VII)')._RomanNumber__contarParentesis()
-        self.assertEqual('Número de paréntesis incorrecto', str(context.exception))
+        self.assertEqual('Número de paréntesis incorrecto - Faltan cierres', str(context.exception))
 
         with self.assertRaises(ValueError) as context:
             RomanNumber('VI)((VII)')._RomanNumber__contarParentesis()
-        self.assertEqual('Número de paréntesis incorrecto', str(context.exception))
+        self.assertEqual('Número de paréntesis incorrecto - Sobran cierres', str(context.exception))
 
 class ArabicNumberTest(unittest.TestCase):
     def test_unidades(self):
@@ -103,6 +103,32 @@ class ArabicNumberTest(unittest.TestCase):
     def test_gruposDe1000(self):
         self.assertEqual(RomanNumber(7763147686)._RomanNumber__gruposDeMil(), [[3, 7], [2, 760],[1, 3147], [0, 686]])
         self.assertEqual(RomanNumber(3763142686)._RomanNumber__gruposDeMil(), [[3, 0], [2, 3760],[1, 3140], [0, 2686]])
+
+
+class TestsForCalculator(unittest.TestCase):
+    def test_parentesis(self):
+        with self.assertRaises(ValueError) as context:
+            RomanNumber('(')
+        self.assertEqual('Número de paréntesis incorrecto - Faltan cierres', str(context.exception))
+
+        with self.assertRaises(ValueError) as context:
+            RomanNumber('(()')
+        self.assertEqual('Número de paréntesis incorrecto - Faltan cierres', str(context.exception))
+
+        with self.assertRaises(ValueError) as context:
+            RomanNumber('((())')
+        self.assertEqual('Número de paréntesis incorrecto - Faltan cierres', str(context.exception))
+
+        with self.assertRaises(ValueError) as context:
+            RomanNumber('((()')
+        self.assertEqual('Número de paréntesis incorrecto - Faltan cierres', str(context.exception))
+
+        with self.assertRaises(ValueError) as context:
+            RomanNumber('(IV))')
+        self.assertEqual('Número de paréntesis incorrecto - Sobran cierres', str(context.exception))
+
+        self.assertEqual(int(RomanNumber('()')), 0)
+
 
 
 if __name__ == '__main__':
